@@ -19,23 +19,33 @@ function fetchRepos(repoName) {
 export default class App extends React.Component {
   state = {
     repoName: "",
-    repos: {},
+    repos: [],
     error: null,
-    info: {}
+    info: []
   };
   renderList(props) {
     return (
       <ul>
-        {Array.from(props).map(item => (
+        {props.map(item => (
           <li key={item.id}>
             {item.name}{" "}
-            <strong>({item.language ? item.language : "mixed"})</strong>{" "}
+            <strong>({item.language || "mixed"})</strong>{" "}
             {item.size} KB
           </li>
         ))}
       </ul>
     );
   }
+
+  getAllInfo(query) {
+    return Promise.all
+    ([fetchRepos(query),
+      fetchAccount(query)]).then((response)=>{
+      this.setState({repos:response[0], info:response[1]})
+    }).catch(error => this.setState({ error }));
+  }
+
+
   showInfo() {
     let { info } = this.state;
     return (
@@ -45,6 +55,7 @@ export default class App extends React.Component {
       </div>
     );
   }
+
   render() {
     const { repoName, repos, error } = this.state;
     return (
@@ -68,14 +79,7 @@ export default class App extends React.Component {
             }}
             onSubmit={e => {
               e.preventDefault();
-              fetchRepos(repoName)
-                .then(repos => {
-                  this.setState({ repos });
-                })
-                .catch(error => this.setState({ error }));
-              fetchAccount(repoName).then(info => {
-                this.setState({ info });
-              });
+              this.getAllInfo(repoName)
             }}
           >
             <input
@@ -86,11 +90,10 @@ export default class App extends React.Component {
             <button>Submit</button>
           </form>
           {error && <pre style={{ color: "red" }}>{error.message}</pre>}
-          {/*<pre>{JSON.stringify(repos, null, 2)}</pre>*/}
           {this.renderList(repos)}
         </div>
         <div className={"infoAcc"}>{this.showInfo()}</div>
       </div>
     );
   }
-}
+};

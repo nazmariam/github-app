@@ -1,12 +1,18 @@
 import React from "react";
 import LANG from "./color";
+let background = new Image();
+
+function arrOfUniqueValues(arr){
+  return arr.filter(
+      (value, index, self) => self.indexOf(value) === index
+  );
+}
 
 function render(ctx, { width, height, repos, repoName }, resArr, rt) {
   requestAnimationFrame(() =>
     render(ctx, { width, height, repos, repoName }, resArr, rt)
   );
   // let t = performance.now();
-  let background = new Image();
   background.src = "static/media/space2.fa3e3e78.jpg";
   ctx.fillStyle = ctx.createPattern(background, "repeat");
   ctx.fill();
@@ -24,29 +30,29 @@ function render(ctx, { width, height, repos, repoName }, resArr, rt) {
     ctx.save();
     ctx.font = "24px Montserrat";
     ctx.fillStyle = "white";
-    resArr.forEach((obj, i) => {
-      for (let key in obj) {
-        let r = 0;
-        let value = obj[key];
-        ctx.strokeStyle = "white";
-        ctx.beginPath();
-        ctx.save();
-        ctx.fillStyle = LANG.COLOR[key];
-        ctx.arc(100 + r * 100, i * 50 + 70 + r, value * 2, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.fill();
-        ctx.restore();
-        ctx.closePath();
-
-        key !== "null"
-          ? ctx.fillText(key + " [" + value + "]", 100 + r * 100, i * 50 + 70)
+    let resAr=[];
+    resArr.forEach(el=> {
+      resAr.push(Object.entries(el))
+    });
+    resAr.forEach((array,i)=>{
+      let key = array[0][0];
+      let value = array[0][1];
+      ctx.strokeStyle = "white";
+      ctx.beginPath();
+      ctx.save();
+      ctx.fillStyle = LANG.COLOR[key];
+      ctx.arc(200 , i * 60 + 70 , value * 2, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fill();
+      ctx.restore();
+      ctx.closePath();
+      key !== "null"
+          ? ctx.fillText(key + " [" + value + "]", 200, i * 60+70)
           : ctx.fillText(
-              "Mixed" + " [" + value + "]",
-              100 + r * 100,
-              i * 50 + 70
-            );
-        r++;
-      }
+          "Mixed" + " [" + value + "]",
+          200,
+          i * 60+70
+          );
     });
     ctx.restore();
 
@@ -90,16 +96,14 @@ export default class Statistics extends React.PureComponent {
   componentDidUpdate() {
     let { repos } = this.props;
     let resArr = [];
-    let languages = Array.from(repos).map(item => item.language);
-    let unique = languages.filter(
-      (value, index, self) => self.indexOf(value) === index
-    );
+    let languages = repos.map(item => item.language);
+    let unique = arrOfUniqueValues(languages);
     for (let i = 0; i < unique.length; i++) {
       let res = {};
       let key = unique[i];
       res[key] = 0;
       for (let j = 0; j < repos.length; j++) {
-        if (Array.from(repos)[j].language === unique[i]) {
+        if (repos[j].language === unique[i]) {
           res[key]++;
         }
       }
@@ -115,9 +119,9 @@ export default class Statistics extends React.PureComponent {
     let ctx = this.ctx;
     let balls = [];
     for (let i = 0; i < quantity; i++) {
-      let size = Array.from(repos)[i].size;
-      let language = Array.from(repos)[i].language;
-      let name = Array.from(repos)[i].name;
+      let size = repos[i].size;
+      let language = repos[i].language;
+      let name = repos[i].name;
       let ball = {
         x: Math.random() * (width - (2 * size) / 1000) + size / 1000,
         y: Math.random() * (height - (2 * size) / 1000) + size / 1000,
