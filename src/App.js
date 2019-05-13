@@ -90,7 +90,7 @@ export default class App extends React.Component {
             <button>Submit</button>
           </form>
           {error && <pre style={{ color: "red" }}>{error.message}</pre>}
-          {this.renderList(repos)}
+          {(repos.length)?this.renderList(repos):''}
         </div>
         <div className={"infoAcc"}>{this.showInfo()}</div>
       </div>

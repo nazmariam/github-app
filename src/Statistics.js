@@ -96,20 +96,21 @@ export default class Statistics extends React.PureComponent {
   componentDidUpdate() {
     let { repos } = this.props;
     let resArr = [];
-    let languages = repos.map(item => item.language);
-    let unique = arrOfUniqueValues(languages);
-    for (let i = 0; i < unique.length; i++) {
-      let res = {};
-      let key = unique[i];
-      res[key] = 0;
-      for (let j = 0; j < repos.length; j++) {
-        if (repos[j].language === unique[i]) {
-          res[key]++;
+    if(repos.length){
+      let languages = repos.map(item => item.language);
+      let unique = arrOfUniqueValues(languages);
+      for (let i = 0; i < unique.length; i++) {
+        let res = {};
+        let key = unique[i];
+        res[key] = 0;
+        for (let j = 0; j < repos.length; j++) {
+          if (repos[j].language === unique[i]) {
+            res[key]++;
+          }
         }
+        resArr.push(res);
       }
-      resArr.push(res);
     }
-
     render(this.ctx, this.props, resArr, this.drawBall());
   }
 
