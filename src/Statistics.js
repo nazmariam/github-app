@@ -41,16 +41,16 @@ function render(ctx, { width, height, repos, repoName }, resArr, rt) {
       ctx.beginPath();
       ctx.save();
       ctx.fillStyle = LANG.COLOR[key];
-      ctx.arc(200 , i * 60 + 70 , value * 2, 0, Math.PI * 2);
+      ctx.arc(100 , i * 60 + 70 , value * 2, 0, Math.PI * 2);
       ctx.stroke();
       ctx.fill();
       ctx.restore();
       ctx.closePath();
       key !== "null"
-          ? ctx.fillText(key + " [" + value + "]", 200, i * 60+70)
+          ? ctx.fillText(key + " [" + value + "]", 100, i * 60+70)
           : ctx.fillText(
           "Mixed" + " [" + value + "]",
-          200,
+          100,
           i * 60+70
           );
     });
