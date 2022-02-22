@@ -2,6 +2,7 @@
   "extends": [
     "config:base"
   ],
+  "groupName": "all",
   "reviewers": ["nazmariam"],
   "packageRules": [
     {
@@ -11,9 +12,6 @@
     {
       "matchDepTypes": ["dependencies"],
       "schedule": ["before 12am on Monday"]
-    },
-    {
-      "groupName": "all"
     }
   ]
 }
