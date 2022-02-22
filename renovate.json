@@ -6,7 +6,7 @@
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
-      "schedule": ["every month on the first day of the month"]
+      "schedule": ["before 1pm on the first day of the month"]
     },
     {
       "matchDepTypes": ["dependencies"],
