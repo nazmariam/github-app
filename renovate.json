@@ -1,5 +1,27 @@
 {
   "extends": [
     "config:base"
+  ],
+  "reviewers": ["nazmariam"],
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "schedule": ["every month on the first day of the month"]
+    },
+    {
+      "matchDepTypes": ["dependencies"],
+      "schedule": ["before 12am on Monday"]
+    },
+    {
+      "matchPackagePatterns": [
+        "npm"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    }
   ]
 }
